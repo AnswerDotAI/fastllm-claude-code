@@ -1,0 +1,9 @@
+project:
+  output-dir: _docs
+
+website:
+  title: "fastllm-claude-code"
+  site-url: "https://AnswerDotAI.github.io/fastllm-claude-code"
+  description: "Claude Code API for fastllm"
+  repo-branch: main
+  repo-url: "https://github.com/AnswerDotAI/fastllm-claude-code"
