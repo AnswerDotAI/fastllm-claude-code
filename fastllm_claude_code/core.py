@@ -18,6 +18,7 @@ from fastllm.types import *
 from fastllm.anthropic import (norm_sse_event, norm_tool_calls, norm_parts,
     norm_finish, norm_usage, finalize_usage, denorm_msgs, delta_index_fn)
 from fastllm.streaming import mk_acollect_stream
+from fastspec.errors import APIError
 
 # %% ../nbs/00_core.ipynb #825c111c
 MCP_SERVER_NAME = "fastllm"
@@ -90,7 +91,11 @@ def claude_mk_payload(msgs, model, stream=False, **kwargs):
         system_prompt=system or "", mcp_servers=mcp_servers,
         allowed_tools=allowed, strict_mcp_config=True, tools=cc_tools)
 
-    opt_kw['stderr'] = lambda s: print(f"[CC stderr] {s}")
+    # opt_kw['stderr'] = lambda s: print(f"[CC stderr] {s}")
+
+    log_path = WORK_DIR / "cc-logs" / f"{datetime.now():%Y%m%d-%H%M%S-%f}.log"
+    log_path.parent.mkdir(parents=True, exist_ok=True)
+    opt_kw['stderr'] = lambda s, p=log_path: p.open('a').write(s + '\n')
 
     if history:
         sid, jsonl = msgs_to_jsonl(history, model=model)
