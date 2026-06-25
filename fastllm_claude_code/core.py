@@ -32,24 +32,50 @@ def _proj_dir(cwd):
 # %% ../nbs/00_core.ipynb #2ce7f9be
 SERVER_TOOLS = ["WebSearch", "WebFetch"]
 
+def _canon(o): return json.dumps(o, sort_keys=True, separators=(",", ":"), ensure_ascii=False)
+def _stable_uuid(s): return str(uuid.uuid5(uuid.NAMESPACE_URL, s))
+
 def msgs_to_jsonl(msgs, model="claude-sonnet-4-6", session_id=None):
     "Convert fastllm Msgs to a CC session JSONL string."
-    sid = session_id or str(uuid.uuid4())
-    ts = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.000Z")
+    den = denorm_msgs(msgs)
+    sid = session_id or _stable_uuid("fastllm-claude-code:" + _canon(den))
+    ts = "2026-01-01T00:00:00.000Z"
     records, prev_uuid = [], None
-    for d in denorm_msgs(msgs):
-        for b in d.get("content", []):
-            if isinstance(b, dict) and b.get("type") == "tool_use":
-                nm = b.get("name", "")
-                if nm and not nm.startswith("mcp__") and nm not in SERVER_TOOLS: b["name"] = f"{MCP_PREFIX}{nm}"
-        u = str(uuid.uuid4())
+
+    for i,d in enumerate(den):
+        d = {**d}
+        content = d.get("content", [])
+        if isinstance(content, list):
+            for b in content:
+                if not isinstance(b, dict): continue
+                b.pop("cache_control", None)
+                if b.get("type") == "tool_use":
+                    nm = b.get("name", "")
+                    if nm and not nm.startswith("mcp__") and nm not in SERVER_TOOLS: b["name"] = f"{MCP_PREFIX}{nm}"
+
+            text_only = d.get("role") == "user" and all(isinstance(b, dict) and b.get("type") == "text" for b in content)
+            if text_only: d["content"] = "".join(b.get("text", "") for b in content)
+
+        u = _stable_uuid(f"{sid}:{i}:{_canon(d)}")
         r = {"type": "user" if d["role"] == "user" else "assistant",
              "sessionId": sid, "uuid": u, "parentUuid": prev_uuid,
              "isSidechain": False, "permissionMode": "default", "timestamp": ts,
              "message": {"type": "message", **d}}
-        if d["role"] == "assistant": r["message"]["model"] = model
-        records.append(r); prev_uuid = u
-    return sid, '\n'.join(json.dumps(r) for r in records) + '\n'
+
+        if d["role"] == "assistant":
+            req_id = f"req_{_stable_uuid(f'{sid}:{i}:request').replace('-', '')[:24]}"
+            msg_id = f"msg_{_stable_uuid(f'{sid}:{i}:msg').replace('-', '')[:24]}"
+            has_tool_use = any(isinstance(b, dict) and b.get("type") == "tool_use" for b in d.get("content", []))
+            r.update({"requestId": req_id, "cwd": str(WORK_DIR), "version": "2.1.187",
+                      "gitBranch": "HEAD", "userType": "external", "entrypoint": "sdk-py"})
+            r["message"].update({"model": model, "id": msg_id,
+                                 "stop_reason": "tool_use" if has_tool_use else "end_turn",
+                                 "stop_sequence": None, "stop_details": None, "usage": {}})
+
+        records.append(r)
+        prev_uuid = u
+
+    return sid, "\n".join(json.dumps(r, separators=(",", ":")) for r in records) + "\n"
 
 # %% ../nbs/00_core.ipynb #aca4eccc
 def mk_stub(name, desc, schema, block):
@@ -71,11 +97,6 @@ def claude_mk_payload(msgs, model, stream=False, **kwargs):
     else:
         history, prompt = msgs, "." # continue tool results, works fine but if it becomes an issue make tool use prompt
     
-    # if history:
-    #     sid, jsonl = msgs_to_jsonl(history, model=model)
-    #     print(f"=== PROMPT: {prompt!r} ===")
-    #     print(jsonl)
-    
     block = asyncio.Event()
     mcp_tools, allowed = [], []
     for t in (tools or []):
@@ -90,12 +111,6 @@ def claude_mk_payload(msgs, model, stream=False, **kwargs):
         include_partial_messages=True, permission_mode="bypassPermissions",
         system_prompt=system or "", mcp_servers=mcp_servers,
         allowed_tools=allowed, strict_mcp_config=True, tools=cc_tools)
-
-    # opt_kw['stderr'] = lambda s: print(f"[CC stderr] {s}")
-
-    log_path = WORK_DIR / "cc-logs" / f"{datetime.now():%Y%m%d-%H%M%S-%f}.log"
-    log_path.parent.mkdir(parents=True, exist_ok=True)
-    opt_kw['stderr'] = lambda s, p=log_path: p.open('a').write(s + '\n')
 
     if history:
         sid, jsonl = msgs_to_jsonl(history, model=model)
