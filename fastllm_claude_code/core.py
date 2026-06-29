@@ -16,7 +16,7 @@ from claude_agent_sdk import (query, ClaudeAgentOptions, create_sdk_mcp_server, 
     AssistantMessage, ToolUseBlock, StreamEvent, ResultMessage)
 from fastllm.types import *
 from fastllm.anthropic import (norm_sse_event, norm_tool_calls, norm_parts,
-    norm_finish, norm_usage, finalize_usage, denorm_msgs, delta_index_fn)
+    norm_finish, norm_usage, finalize_usage, denorm_msgs, delta_index_fn, cost)
 from fastllm.streaming import mk_acollect_stream
 from fastspec.errors import APIError
 
@@ -166,4 +166,4 @@ api_registry.register('claude_code',
     norm_tool_calls=norm_tool_calls, norm_parts=norm_parts,
     norm_finish=norm_finish, norm_usage=norm_usage, finalize_usage=finalize_usage,
     mk_payload=claude_mk_payload, acollect_stream=claude_acollect_stream,
-    cost=lambda *_: 0)
+    cost=cost)
