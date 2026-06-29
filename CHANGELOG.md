@@ -2,6 +2,10 @@
 
 <!-- do not remove -->
 
+## 0.0.4
+
+use registered claude code cost function (same as codex pricing)
+
 ## 0.0.3
 
 fix prompt caching
