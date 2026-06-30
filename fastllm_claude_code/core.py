@@ -108,9 +108,9 @@ def claude_mk_payload(msgs, model, stream=False, **kwargs):
     cc_tools = ["WebSearch", "WebFetch"] if kwargs.get('web_search_options') is not None else []
 
     opt_kw = dict(model=model, env={'ANTHROPIC_API_KEY': ''}, cwd=str(WORK_DIR),
-        include_partial_messages=True, permission_mode="bypassPermissions",
-        system_prompt=system or "", mcp_servers=mcp_servers,
-        allowed_tools=allowed, strict_mcp_config=True, tools=cc_tools)
+                    include_partial_messages=True, permission_mode="default",
+                    system_prompt=system or "", mcp_servers=mcp_servers,
+                    allowed_tools=allowed, strict_mcp_config=True, tools=cc_tools)
 
     if history:
         sid, jsonl = msgs_to_jsonl(history, model=model)
