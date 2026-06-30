@@ -2,6 +2,11 @@
 
 <!-- do not remove -->
 
+## 0.0.5
+
+use default permission to be able to run as root
+
+
 ## 0.0.4
 
 use registered claude code cost function (same as codex pricing)
