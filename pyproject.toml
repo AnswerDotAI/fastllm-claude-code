@@ -31,3 +31,6 @@ version = {attr = "fastllm_claude_code.__version__"}
 include = ["fastllm_claude_code"]
 
 [tool.nbdev]
+
+[tool.chkstyle]
+skip_paths = ["_modidx.py"]
