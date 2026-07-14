@@ -18,7 +18,7 @@ from fastllm.anthropic import (norm_sse_event, norm_tool_calls, norm_parts,
     norm_finish, norm_usage, finalize_usage, denorm_msgs, delta_index_fn, cost)
 from fastllm.streaming import mk_acollect_stream
 from fastspec.errors import APIError
-from .session import *
+from llmsurgery.ant import *
 
 # %% ../nbs/01_core.ipynb #825c111c
 MCP_SERVER_NAME = "fastllm"
@@ -32,9 +32,7 @@ def msgs_to_recs(msgs, model="claude-sonnet-4-6", session_id=None):
     "Convert fastllm Msgs to CC session records, with ids derived stably from the content."
     den = denorm_msgs(msgs)
     sid = session_id or stable_uuid("fastllm-claude-code:" + canon(den))
-    ts = "2026-01-01T00:00:00.000Z"
-    recs = []
-    for i,d in enumerate(den):
+    for d in den:
         content = d.get("content", [])
         if isinstance(content, list):
             for b in content:
@@ -45,9 +43,8 @@ def msgs_to_recs(msgs, model="claude-sonnet-4-6", session_id=None):
                     if nm and not nm.startswith("mcp__") and nm not in SERVER_TOOLS: b["name"] = f"{MCP_PREFIX}{nm}"
             if d["role"] == "user" and all(isinstance(b, dict) and b.get("type") == "text" for b in content):
                 content = "".join(b.get("text", "") for b in content)
-        uid = stable_uuid(f"{sid}:{i}:{canon(dict(d, content=content))}")
-        recs.append(mk_rec(d["role"], content, cwd=WORK_DIR, uid=uid, ts=ts, model=model, entrypoint="sdk-py"))
-    return sid, recs
+        d["content"] = content
+    return sid, msgs2recs(den, key=sid, cwd=WORK_DIR, model=model, entrypoint="sdk-py")
 
 # %% ../nbs/01_core.ipynb #aca4eccc
 def mk_stub(name, desc, schema, block):
