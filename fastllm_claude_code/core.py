@@ -12,6 +12,7 @@ __all__ = ['MCP_SERVER_NAME', 'MCP_PREFIX', 'SERVER_TOOLS', 'CONT_PROMPT', 'WORK
 from fastcore.utils import *
 from claude_agent_sdk import ClaudeAgentOptions
 from fastllm.types import *
+from aidialog.msg_parts import Part, PartType, Msg
 from fastllm.anthropic import (norm_sse_event, norm_tool_calls, norm_parts,
     norm_finish, norm_usage, finalize_usage, denorm_msgs, delta_index_fn, cost)
 from fastllm.streaming import mk_acollect_stream
