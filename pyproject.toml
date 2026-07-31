@@ -15,7 +15,7 @@ classifiers = [
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3 :: Only",
 ]
-dependencies = ['python-fastllm>=0.0.32', 'claude_agent_sdk', 'llmsurgery']
+dependencies = ['python-fastllm>=0.0.34', 'claude_agent_sdk', 'llmsurgery']
 
 [project.urls]
 Repository = "https://github.com/AnswerDotAI/fastllm-claude-code"
@@ -23,6 +23,9 @@ Documentation = "https://AnswerDotAI.github.io/fastllm-claude-code/"
 
 [project.entry-points.nbdev]
 fastllm_claude_code = "fastllm_claude_code._modidx:d"
+
+[project.entry-points."fastllm.apis"]
+claude_code = "fastllm_claude_code.core"
 
 [tool.setuptools.dynamic]
 version = {attr = "fastllm_claude_code.__version__"}
