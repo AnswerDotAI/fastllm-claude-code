@@ -12,7 +12,7 @@ __all__ = ['MCP_SERVER_NAME', 'MCP_PREFIX', 'SERVER_TOOLS', 'CONT_PROMPT', 'WORK
 from fastcore.utils import *
 from claude_agent_sdk import ClaudeAgentOptions
 from fastllm.types import *
-from aidialog.msg_parts import Part, PartType, Msg
+from aidialog.msg_parts import Part, Msg, Text, Thinking, ToolUse, ToolResult
 from fastllm.anthropic import (norm_sse_event, norm_tool_calls, norm_parts,
     norm_finish, norm_usage, finalize_usage, denorm_msgs, delta_index_fn, cost)
 from fastllm.streaming import mk_acollect_stream
@@ -55,7 +55,8 @@ def claude_mk_payload(msgs, model, stream=False, **kwargs):
     mcp_servers, allowed, hooks = defer_tools(MCP_SERVER_NAME, triples, held)
     opt_kw = dict(model=model, env={'ANTHROPIC_API_KEY': ''}, cwd=str(WORK_DIR), include_partial_messages=True,
         permission_mode="default", system_prompt=system or "", mcp_servers=mcp_servers, allowed_tools=allowed,
-        hooks=hooks or None, strict_mcp_config=True, tools=SERVER_TOOLS if kwargs.get('web_search_options') is not None else [])
+        hooks=hooks or None, strict_mcp_config=True, max_buffer_size=10*2**20,
+        tools=SERVER_TOOLS if kwargs.get('web_search_options') is not None else [])
     if den or extra:
         opt_kw['resume'] = msgs2sess(den, key='fastllm-claude-code', cwd=WORK_DIR, extra=extra, model=model, entrypoint='sdk-py')
     return dict(prompt=prompt, options=ClaudeAgentOptions(**opt_kw))
