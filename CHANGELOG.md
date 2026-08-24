@@ -2,6 +2,14 @@
 
 <!-- do not remove -->
 
+## 0.0.8
+
+### New Features
+
+- Rewrite `claude_code` provider as a thin fastclaude adapter with in-process tools, real streamed tool results, and history reshaping ([#7](https://github.com/AnswerDotAI/fastllm-claude-code/issues/7))
+- Migrate to typed `msg_parts` classes (Text/Thinking/ToolUse/ToolResult), add `max_buffer_size` ([#5](https://github.com/AnswerDotAI/fastllm-claude-code/issues/5))
+
+
 ## 0.0.7
 
 ### New Features
