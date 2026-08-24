@@ -15,11 +15,14 @@ classifiers = [
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3 :: Only",
 ]
-dependencies = ['python-fastllm>=0.0.38', 'claude_agent_sdk<0.2.140', 'llmsurgery']
+dependencies = ['python-fastllm>=0.0.42', 'fastclaude>=0.0.1']
 
 [project.urls]
 Repository = "https://github.com/AnswerDotAI/fastllm-claude-code"
 Documentation = "https://AnswerDotAI.github.io/fastllm-claude-code/"
+
+[tool.chkstyle]
+skip_paths = ["_modidx.py", "_proc"]
 
 [project.entry-points.nbdev]
 fastllm_claude_code = "fastllm_claude_code._modidx:d"
@@ -36,6 +39,3 @@ include = ["fastllm_claude_code"]
 [tool.nbdev]
 allowed_metadata_keys = ['solveit']
 allowed_cell_metadata_keys = ['solveit_ai']
-
-[tool.chkstyle]
-skip_paths = ["_modidx.py"]
