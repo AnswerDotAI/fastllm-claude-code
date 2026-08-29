@@ -2,6 +2,13 @@
 
 <!-- do not remove -->
 
+## 0.0.9
+
+### New Features
+
+- Simplify `claude_code` provider to a pure stream adapter, letting FastLLM own chat loop execute tools instead of running them in-process ([#8](https://github.com/AnswerDotAI/fastllm-claude-code/issues/8))
+
+
 ## 0.0.8
 
 ### New Features
