@@ -2,6 +2,13 @@
 
 <!-- do not remove -->
 
+## 0.0.10
+
+### New Features
+
+- Add `previous_response_id` continuation support: pause runs at tool calls and resume the same Claude process by one-shot response id ([#9](https://github.com/AnswerDotAI/fastllm-claude-code/issues/9))
+
+
 ## 0.0.9
 
 ### New Features
