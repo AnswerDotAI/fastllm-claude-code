@@ -15,7 +15,7 @@ classifiers = [
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3 :: Only",
 ]
-dependencies = ['python-fastllm>=0.0.44', 'fastclaude>=0.0.3']
+dependencies = ['python-fastllm>=0.0.44', 'fastclaude>=0.0.3', 'fasttransport>=0.0.2']
 
 [project.urls]
 Repository = "https://github.com/AnswerDotAI/fastllm-claude-code"

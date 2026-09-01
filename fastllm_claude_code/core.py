@@ -16,7 +16,7 @@ from fastllm.types import *
 from aidialog.msg_parts import Completion, ToolResult
 from fastllm.anthropic import norm_sse_event, norm_tool_calls, norm_parts, norm_finish, norm_usage, finalize_usage, delta_index_fn, cost
 from fastllm.streaming import mk_acollect_stream, Delta
-from fastspec.errors import APIError
+from fasttransport.errors import APIError
 from fastclaude.core import astream, unqual, SERVER_TOOLS
 
 # %% ../nbs/01_core.ipynb #34a56d9b
