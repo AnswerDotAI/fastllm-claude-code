@@ -21,7 +21,11 @@ d = { 'settings': { 'branch': 'main',
                                           'fastllm_claude_code.core._take_run': ('core.html#_take_run', 'fastllm_claude_code/core.py'),
                                           'fastllm_claude_code.core.claude_acollect_stream': ( 'core.html#claude_acollect_stream',
                                                                                                'fastllm_claude_code/core.py'),
+                                          'fastllm_claude_code.core.claude_auth': ('core.html#claude_auth', 'fastllm_claude_code/core.py'),
                                           'fastllm_claude_code.core.claude_cancel': ( 'core.html#claude_cancel',
                                                                                       'fastllm_claude_code/core.py'),
+                                          'fastllm_claude_code.core.claude_info': ('core.html#claude_info', 'fastllm_claude_code/core.py'),
                                           'fastllm_claude_code.core.claude_mk_payload': ( 'core.html#claude_mk_payload',
-                                                                                          'fastllm_claude_code/core.py')}}}
+                                                                                          'fastllm_claude_code/core.py'),
+                                          'fastllm_claude_code.core.claude_token': ( 'core.html#claude_token',
+                                                                                     'fastllm_claude_code/core.py')}}}
