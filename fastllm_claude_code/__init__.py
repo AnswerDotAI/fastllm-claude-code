@@ -4,4 +4,4 @@ Modules:
 
 - `fastllm_claude_code.core`: Claude code api backend for fastllm"""
 
-__version__ = "0.0.12"
+__version__ = "0.0.13"
