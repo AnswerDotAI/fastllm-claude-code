@@ -2,6 +2,13 @@
 
 <!-- do not remove -->
 
+## 0.0.12
+
+### New Features
+
+- Add subscription OAuth token support: `claude_auth`, `claude_token` and `claude_info`, and pass `oauth_token` into the payload env ([#11](https://github.com/AnswerDotAI/fastllm-claude-code/issues/11))
+
+
 ## 0.0.11
 
 ### New Features
