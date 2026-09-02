@@ -2,6 +2,13 @@
 
 <!-- do not remove -->
 
+## 0.0.13
+
+### New Features
+
+- Drop the paused-run registry, and isolate proxy runs from the host's settings ([#12](https://github.com/AnswerDotAI/fastllm-claude-code/pull/12)), thanks to [@jph00](https://github.com/jph00)
+
+
 ## 0.0.12
 
 ### New Features
