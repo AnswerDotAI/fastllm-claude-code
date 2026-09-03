@@ -2,6 +2,13 @@
 
 <!-- do not remove -->
 
+## 0.0.14
+
+### Bugs Squashed
+
+- Register `collate_raw` for `claude_code` provider so assistant messages are rebuilt in Anthropic wire form from streamed parts ([#13](https://github.com/AnswerDotAI/fastllm-claude-code/issues/13))
+
+
 ## 0.0.13
 
 ### New Features
