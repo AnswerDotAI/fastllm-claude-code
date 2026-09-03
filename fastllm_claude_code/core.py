@@ -15,7 +15,7 @@ __all__ = ['claude_mk_payload', 'claude_acollect_stream', 'claude_auth', 'claude
 from fastcore.utils import *
 from fastllm.types import *
 from aidialog.msg_parts import ToolUse
-from fastllm.anthropic import norm_sse_event, norm_tool_calls, norm_parts, norm_finish, norm_usage, finalize_usage, delta_index_fn, cost
+from fastllm.anthropic import norm_sse_event, norm_tool_calls, norm_parts, norm_finish, norm_usage, finalize_usage, delta_index_fn, collate_raw, cost
 from fastllm.streaming import mk_acollect_stream, Delta
 from fasttransport.errors import APIError
 from fastclaude.core import astream, unqual, SERVER_TOOLS
@@ -89,7 +89,7 @@ async def claude_acollect_stream(payload, **kwargs):
 # %% ../nbs/01_core.ipynb #8dc1ae5f
 api_registry.register('claude_code',
     norm_tool_calls=norm_tool_calls, norm_parts=norm_parts, norm_finish=norm_finish, norm_usage=norm_usage,
-    finalize_usage=finalize_usage, mk_payload=claude_mk_payload, acollect_stream=claude_acollect_stream, cost=cost)
+    finalize_usage=finalize_usage, collate_raw=collate_raw, mk_payload=claude_mk_payload, acollect_stream=claude_acollect_stream, cost=cost)
 
 # %% ../nbs/01_core.ipynb #645ba66f
 def claude_auth(auth):
