@@ -1,8 +1,14 @@
-"""Claude code api backend for fastllm
+"""Claude Code API backend for FastLLM
 
-FastLLM's `claude_code` provider is a thin adapter over `fastclaude`. `claude_mk_payload` hands the canonical history and tool schemas to `astream`, and `claude_acollect_stream` normalizes the run's events to FastLLM deltas. Every request is stateless: a history ending in tool results continues by fastclaude's deferral, so FastLLM's ordinary client-owned tool loop replays canonical history and no response id is ever issued.
+`claude_code` connects FastLLM to the installed Claude Code CLI through `fastclaude`. `claude_mk_payload` passes the canonical `Msg` history and tool schemas to `astream`. `claude_acollect_stream` converts the resulting events to FastLLM's streaming output.
 
-A Claude subscription is used through a long-lived OAuth token from `claude setup-token`, which the CLI reads from `CLAUDE_CODE_OAUTH_TOKEN`. A host holding tokens for many users stores a block per user and passes the token as `oauth_token`; these three functions give that host the same shape the Codex module offers: what to store, the credential for a call, and what to show about it.
+FastLLM executes the requested tools and includes their results in the next request's history. FastClaude resumes the pending tool call in a fresh process and supplies the result. Each request is stateless. The provider never issues a response id.
+
+Run `claude setup-token` to obtain a long-lived token for a Claude subscription. Claude Code reads it from `CLAUDE_CODE_OAUTH_TOKEN`. The [Claude Code authentication docs](https://code.claude.com/docs/en/authentication#generate-a-long-lived-token) specify a one-year lifetime.
+
+A host serving multiple users can store an auth dictionary for each user and pass its token as `oauth_token`. `claude_auth` prepares that dictionary from a pasted token or an existing dictionary. It trims whitespace and checks the `sk-ant-oat` prefix without contacting Claude.
+
+`claude_token` returns the stored token and `None` for refreshed auth. It does not refresh tokens, including when `force_refresh=True`. `claude_info` returns `None` for both plan and expiry because the stored dictionary contains neither. These functions use the same host-facing interface as FastLLM's Codex module.
 
 Docs: https://AnswerDotAI.github.io/fastllm-claude-code/core.html.md"""
 
@@ -33,7 +39,7 @@ def claude_mk_payload(msgs, model, stream=False, **kwargs):
 
 # %% ../nbs/01_core.ipynb #bd5d71f9
 def _reidx():
-    "Stateful rebase of per-message block indices onto one global sequence"
+    "Return a stateful function that indexes content blocks across messages"
     base,mx = 0,-1
     def f(ev):
         nonlocal base,mx
@@ -95,16 +101,16 @@ api_registry.register('claude_code',
 
 # %% ../nbs/01_core.ipynb #645ba66f
 def claude_auth(auth):
-    "The block to store from a pasted `claude setup-token` token, or a block holding one"
+    "Prepare an auth dictionary from a setup token or an existing auth dictionary"
     token = auth.get('token') if isinstance(auth, dict) else auth
     token = token.strip() if isinstance(token, str) else ''
     if not token.startswith('sk-ant-oat'): raise ValueError('Claude auth is the token from `claude setup-token`')
     return dict(token=token)
 
 async def claude_token(auth, force_refresh=False):
-    "The token in `auth`, and `None`: it lives for a year and there is nothing to refresh"
+    "Return `(token, None)` from stored auth without refreshing the token"
     return auth['token'], None
 
 def claude_info(auth):
-    "What a stored block says about itself; the token carries no plan or expiry"
+    "Return `None` for plan and expiry, which the stored token does not describe"
     return dict(plan=None, expires=None)
