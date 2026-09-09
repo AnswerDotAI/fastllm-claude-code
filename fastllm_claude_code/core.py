@@ -83,7 +83,9 @@ def _check_run(run, payload):
 async def claude_acollect_stream(payload, **kwargs):
     "Adapt one `ClaudeRun` to FastLLM"
     run = astream(**payload)
-    async for o in mk_acollect_stream(_claude_deltas(run), index_fn=delta_index_fn, api_name='claude_code', **kwargs): yield o
+    try:
+        async for o in mk_acollect_stream(_claude_deltas(run), index_fn=delta_index_fn, api_name='claude_code', **kwargs): yield o
+    except FileNotFoundError as e: raise APIError(str(e), provider='claude_code', model=payload.get('model'), retryable=False) from e
     _check_run(run, payload)
 
 # %% ../nbs/01_core.ipynb #8dc1ae5f
