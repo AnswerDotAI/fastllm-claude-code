@@ -2,6 +2,13 @@
 
 <!-- do not remove -->
 
+## 0.0.15
+
+### New Features
+
+- Raise APIError instead of FileNotFoundError when the claude executable is missing ([#14](https://github.com/AnswerDotAI/fastllm-claude-code/issues/14))
+
+
 ## 0.0.14
 
 ### Bugs Squashed
