@@ -34,7 +34,8 @@ def claude_mk_payload(msgs, model, stream=False, **kwargs):
     native = SERVER_TOOLS if kwargs.get('web_search_options') is not None else ()
     payload = dict(msgs=list(msgs), model=model, system=kwargs.get('system') or '', tools=tools or None, native_tools=native,
         setting_sources=kwargs.get('setting_sources', ()))
-    if key := kwargs.get('oauth_token'): payload['env'] = dict(CLAUDE_CODE_OAUTH_TOKEN=key)
+    payload['env'] = dict(CLAUDE_CODE_DISABLE_EXPERIMENTAL_BETAS='1')
+    if key := kwargs.get('oauth_token'): payload['env']['CLAUDE_CODE_OAUTH_TOKEN'] = key
     return payload
 
 # %% ../nbs/01_core.ipynb #bd5d71f9
