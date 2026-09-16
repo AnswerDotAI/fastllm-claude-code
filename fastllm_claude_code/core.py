@@ -2,7 +2,7 @@
 
 `claude_code` connects FastLLM to the installed Claude Code CLI through `fastclaude`. `claude_mk_payload` passes the canonical `Msg` history and tool schemas to `astream`. `claude_acollect_stream` converts the resulting events to FastLLM's streaming output.
 
-FastLLM executes the requested tools and includes their results in the next request's history. FastClaude resumes the pending tool call in a fresh process and supplies the result. Each request is stateless. The provider never issues a response id.
+FastLLM executes the requested tools and includes their results in the next request's history. FastClaude resumes the pending tool call in a fresh process and supplies the result. Each request supplies complete history. A stable `prompt_cache_key` retains account-context reminders between requests. The provider never issues a response id.
 
 Run `claude setup-token` to obtain a long-lived token for a Claude subscription. Claude Code reads it from `CLAUDE_CODE_OAUTH_TOKEN`. The [Claude Code authentication docs](https://code.claude.com/docs/en/authentication#generate-a-long-lived-token) specify a one-year lifetime.
 
@@ -33,8 +33,8 @@ def claude_mk_payload(msgs, model, stream=False, **kwargs):
         for t in (kwargs.get('tools') or []) if t.get('type') == 'function' and (f := t.get('function') or t)]
     native = SERVER_TOOLS if kwargs.get('web_search_options') is not None else ()
     payload = dict(msgs=list(msgs), model=model, system=kwargs.get('system') or '', tools=tools or None, native_tools=native,
-        setting_sources=kwargs.get('setting_sources', ()))
-    payload['env'] = dict(CLAUDE_CODE_DISABLE_EXPERIMENTAL_BETAS='1')
+        prompt_cache_key=kwargs.get('prompt_cache_key'), env={})
+    if 'setting_sources' in kwargs: payload['setting_sources'] = kwargs['setting_sources']
     if key := kwargs.get('oauth_token'): payload['env']['CLAUDE_CODE_OAUTH_TOKEN'] = key
     return payload
 
