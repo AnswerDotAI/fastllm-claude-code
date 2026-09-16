@@ -2,6 +2,13 @@
 
 <!-- do not remove -->
 
+## 0.0.16
+
+### New Features
+
+- Pass `prompt_cache_key` through to fastclaude payload and only forward `setting_sources` when explicitly provided ([#17](https://github.com/AnswerDotAI/fastllm-claude-code/issues/17))
+
+
 ## 0.0.15
 
 ### New Features
