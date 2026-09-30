@@ -41,8 +41,9 @@ Use the provider prefix in a FastLLM call:
 
 ``` python
 from fastllm.acomplete import acomplete
+from fastllm.types import sonn
 
-answer = await acomplete('Answer briefly: what is 2+2?', model='claude_code/claude-sonnet-5')
+answer = await acomplete('Answer briefly: what is 2+2?', model=f'claude_code/{sonn}')
 ```
 
 For a client-owned tool loop, pass standard Responses API or Chat Completions function schemas. A response containing tool calls ends the turn. Execute the requests in your application, extend the history with their results, and call again.
@@ -50,10 +51,10 @@ For a client-owned tool loop, pass standard Responses API or Chat Completions fu
 Calls do not return a response id. Supply complete history each time and reuse `prompt_cache_key` to retain Claude’s account-context reminders:
 
 ``` python
-first = await acomplete(messages, model='claude_code/claude-sonnet-5', tools=tools, prompt_cache_key='my-dialog')
+first = await acomplete(messages, model=f'claude_code/{sonn}', tools=tools, prompt_cache_key='my-dialog')
 assert first.tool_calls and first.response_id is None
 
-final = await acomplete(messages_with_results, model='claude_code/claude-sonnet-5', tools=tools, prompt_cache_key='my-dialog')
+final = await acomplete(messages_with_results, model=f'claude_code/{sonn}', tools=tools, prompt_cache_key='my-dialog')
 ```
 
 Set `stream=True` for FastLLM’s normalized async stream. Non-streaming calls collect the same stream into one `Completion`. The adapter never executes tool requests.
