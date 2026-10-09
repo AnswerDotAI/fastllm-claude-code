@@ -35,6 +35,9 @@ def claude_mk_payload(msgs, model, stream=False, **kwargs):
     payload = dict(msgs=list(msgs), model=model, system=kwargs.get('system') or '', tools=tools or None, native_tools=native,
         prompt_cache_key=kwargs.get('prompt_cache_key'), env={})
     if 'setting_sources' in kwargs: payload['setting_sources'] = kwargs['setting_sources']
+    if eff := kwargs.get('reasoning_effort'):
+        payload['thinking'] = 'disabled' if eff == 'none' else 'adaptive'
+        if eff != 'none': payload['effort'] = eff
     if key := kwargs.get('oauth_token'): payload['env']['CLAUDE_CODE_OAUTH_TOKEN'] = key
     return payload
 
