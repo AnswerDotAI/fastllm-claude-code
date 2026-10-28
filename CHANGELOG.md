@@ -2,6 +2,13 @@
 
 <!-- do not remove -->
 
+## 0.0.17
+
+### New Features
+
+- Register `claude_code` provider with `raw_api=anthropic` ([#19](https://github.com/AnswerDotAI/fastllm-claude-code/issues/19))
+
+
 ## 0.0.16
 
 ### New Features
