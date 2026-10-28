@@ -98,7 +98,7 @@ async def claude_acollect_stream(payload, **kwargs):
 # %% ../nbs/01_core.ipynb #8dc1ae5f
 api_registry.register('claude_code',
     norm_tool_calls=norm_tool_calls, norm_parts=norm_parts, norm_finish=norm_finish, norm_usage=norm_usage,
-    finalize_usage=finalize_usage, collate_raw=collate_raw, mk_payload=claude_mk_payload, acollect_stream=claude_acollect_stream, cost=cost)
+    finalize_usage=finalize_usage, collate_raw=collate_raw, raw_api='anthropic', mk_payload=claude_mk_payload, acollect_stream=claude_acollect_stream, cost=cost)
 
 # %% ../nbs/01_core.ipynb #645ba66f
 def claude_auth(auth):
