@@ -2,6 +2,13 @@
 
 <!-- do not remove -->
 
+## 0.0.18
+
+### Bugs Squashed
+
+- Mark native Claude Code tool calls as server-executed, attach their results to completions, and keep CLI messages for replay ([#20](https://github.com/AnswerDotAI/fastllm-claude-code/issues/20))
+
+
 ## 0.0.17
 
 ### New Features
