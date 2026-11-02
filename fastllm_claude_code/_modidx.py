@@ -20,5 +20,7 @@ d = { 'settings': { 'branch': 'main',
                                           'fastllm_claude_code.core.claude_info': ('core.html#claude_info', 'fastllm_claude_code/core.py'),
                                           'fastllm_claude_code.core.claude_mk_payload': ( 'core.html#claude_mk_payload',
                                                                                           'fastllm_claude_code/core.py'),
+                                          'fastllm_claude_code.core.claude_norm_completion': ( 'core.html#claude_norm_completion',
+                                                                                               'fastllm_claude_code/core.py'),
                                           'fastllm_claude_code.core.claude_token': ( 'core.html#claude_token',
                                                                                      'fastllm_claude_code/core.py')}}}
