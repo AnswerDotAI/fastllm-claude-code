@@ -37,5 +37,6 @@ version = {attr = "fastllm_claude_code.__version__"}
 include = ["fastllm_claude_code"]
 
 [tool.nbdev]
+to_meta = ["export"]
 allowed_metadata_keys = ['solveit']
 allowed_cell_metadata_keys = ['solveit_ai']
