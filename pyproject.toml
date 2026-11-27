@@ -7,7 +7,7 @@ name = "fastllm-claude-code"
 dynamic = ["version"]
 description = "Claude Code API for fastllm"
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 license = "Apache-2.0"
 authors = [{name = "Kerem Turgutlu", email = "keremturgutlu@gmail.com"}]
 keywords = ['nbdev']
